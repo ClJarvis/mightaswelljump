@@ -1,7 +1,7 @@
 .grid {
 	width:  400px;
 	height: 600px;
-	background-color: aliceblue;
+	background-color: #333;
 	position: relative;
 }
 
@@ -15,6 +15,6 @@
 .stage {
 	width: 85px;
 	height: 15px;
-	background-color: tan;
+	background-color: #673AB7;
 	position: absolute;
 }
