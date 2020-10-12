@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const grid = document.querySelector('.grid')
 	const guitar = document.createElement('div')
 	let guitarLeftSpace = 50
-	let guitarBottomSpace = 250
+	let startPoint = 150
+	let guitarBottomSpace = startPoint
 	let isGameOver = false
 	let stageCount = 5 
 	let stages = []
@@ -13,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	let isGoingRight = false
 	let leftTimerId
 	let rightTimerId
+	let score = 0
+	let speed = 3 
 
 	class Stage {
 		constructor(newStageBottom) {
@@ -51,7 +54,19 @@ document.addEventListener('DOMContentLoaded', () => {
 			stages.forEach(stage => {
 				stage.bottom -= 4
 				let visual = stage.visual
-				visual.style.bottom = stage.bottom + 'px '
+				visual.style.bottom = stage.bottom + 'px'
+
+				if(stage.bottom < 10) {
+					let firstStage = stages[0].visual
+					firstStage.classList.remove('stage')
+					stages.shift()
+					console.log(stages)
+					score++
+					var newStage = new Stage(600)
+					stages.push(newStage)
+				}
+
+
 			})
 		}
 	}
@@ -62,8 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		upTimerId = setInterval(function () {
 			guitarBottomSpace += 20
 			guitar.style.bottom  = guitarBottomSpace + 'px'
-			if (guitarBottomSpace > 350) {
+			if (guitarBottomSpace > startPoint + 200) {
 				fall()
+				isJumping = false
 			}
 		},30)
 	}
@@ -87,7 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
 					!isJumping
 				) {
 				console.log('landed')
+				startPoint= guitarBottomSpace
 				jump()
+				isJumping = true
 				}
 			})
 			
@@ -97,27 +115,69 @@ document.addEventListener('DOMContentLoaded', () => {
 	function gameOver() {
 		console.log("Game over")
 		isGameOver = true
+		while(grid.firstChild){
+			grid.removeChild(grid.firstChild)
+		}
+		grid.innerHTML = score
 		clearInterval(upTimerId)
 		clearInterval(downTimerId)
+		clearInterval(leftTimerId)
+		clearInterval(rightTimerId)
 	}
 
 	function control(e) {
+		guitar.style.bottom = guitarBottomSpace + 'px'
 		if (e.key === "ArrowLeft"){
-			//mv left
+			moveLeft( )
 		} else if (e.key === "ArrowRight"){
-			//mv rg
+			moveRight()
 		} else if (e.key === "ArrowUp"){
-			// move straight
+			moveStraight()
 		}
 	}
 
+	function moveLeft() {
+		if (isGoingLeft){
+			clearInterval(rightTimerId)
+			isGoingRight = false
+		}
+		isGoingLeft = true
+		leftTimerId = setInterval(function () {
+			if (guitarLeftSpace >= 0){
+			guitarLeftSpace -= 5
+			guitar.style.left = guitarLeftSpace + 'px'
+		} else moveRight()
+		},20)
+	}
+
+	function moveRight() {
+		if (isGoingLeft) {
+			clearInterval(leftTimerId)
+			isGoingLeft = false
+		}
+		isGoingRight = true
+		rightTimerId = setInterval(function () {
+			 if (guitarLeftSpace <= 340) {
+			 	guitarLeftSpace += 5
+			 	guitar.style.left = guitarLeftSpace + 'px'
+			 } else moveLeft()
+		 },20)
+	}
+
+	function moveStraight() {
+		isGoingRight = false
+		isGoingLeft = false
+		clearInterval(rightTimerId)
+		clearInterval(leftTimerId)
+	}
 
 	function start() {
 		if (!isGameOver) {
 			createStage()
 			createGuitar()
 			setInterval(moveStages,30)
-			jump()
+			jump(startPoint)
+			document.addEventListener('keyup', control)
 		}
 	}
 //add button later 18:11
