@@ -9,15 +9,17 @@
 }
 
 .guitar {
-	width: 60px;
-	height: 85px;
-	background-color: green;
+	width: 80px;
+	height: 80px;
+
+	background-image: url("assets/guitar.svg");
 	position: absolute;
 }
 
 .stage {
 	width: 85px;
 	height: 15px;
-	background-color: #673AB7;
+	background-color: rgba(205, 171, 83, .3);
 	position: absolute;
+	border-radius: 16%;
 }

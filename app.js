@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			})
 			
-		},20)
+		},25)
 	}
 
 	function gameOver() {
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			guitarLeftSpace -= 5
 			guitar.style.left = guitarLeftSpace + 'px'
 		} else moveRight()
-		},20)
+		},25)
 	}
 
 	function moveRight() {
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			 	guitarLeftSpace += 5
 			 	guitar.style.left = guitarLeftSpace + 'px'
 			 } else moveLeft()
-		 },20)
+		 },25)
 	}
 
 	function moveStraight() {
